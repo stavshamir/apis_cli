@@ -38,6 +38,21 @@ def entries(title: str, category: str, no_auth: bool):
 @apis.command()
 def random(title: str, category: str, no_auth: bool):
     """Get a random API."""
+    params = {
+        'title': title,
+        'category': category
+    }
+
+    if no_auth:
+        params['auth'] = 'null'
+
+    response = requests.get(url=f'{BASE_URL}/random', params=params)
+    if response.status_code is 200:
+        entry = response.json()['entries'][0]
+        pretty_entry = '\n'.join(f'{k}: {v}' for k, v in entry.items())
+        print(f'{pretty_entry}\n')
+    else:
+        print(f'Could not get a random API: {response.text}')
 
 
 @apis.command()
