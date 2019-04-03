@@ -15,6 +15,21 @@ def apis():
 @apis.command()
 def entries(title: str, category: str, no_auth: bool):
     """List all cataloged APIs."""
+    params = {
+        'title': title,
+        'category': category
+    }
+
+    if no_auth:
+        params['auth'] = 'null'
+
+    response = requests.get(url=f'{BASE_URL}/entries', params=params)
+    if response.status_code is 200:
+        for i, entry in enumerate(response.json()['entries']):
+            pretty_entry = '\n'.join(f'{k}: {v}' for k, v in entry.items())
+            print(f'{i + 1}.\n{pretty_entry}\n')
+    else:
+        print(f'Could not get the APIs: {response.text}')
 
 
 @click.option('-t', '--title', help='Name of API (matches via substring - i.e. "at" would return "cat" and "atlas".')
