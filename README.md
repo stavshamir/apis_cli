@@ -1,0 +1,1 @@
+A CLI for the public [API of public APIs](https://github.com/davemachado/public-api).
